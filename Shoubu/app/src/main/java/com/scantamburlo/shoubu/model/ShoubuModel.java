@@ -12,14 +12,14 @@ import java.util.TimerTask;
  */
 public class ShoubuModel {
     public static final long MILLIS_TO_NANOS = 1000000L;
-    public final static String PROP_STATUS = "status";
-    public final static String PROP_ELAPSED_TIME = "elapsedTime";
-    public final static String PROP_POINTS = "points";
-    public final static String PROP_PENALITY = "penality";
+    public final static String PROP_STATUS = "status"; // NOI18N
+    public final static String PROP_ELAPSED_TIME = "elapsedTime"; // NOI18N
+    public final static String PROP_POINTS = "points"; // NOI18N
+    public final static String PROP_PENALITY = "penality"; // NOI18N
 
 
     public enum Status {READY, RUNNING, PAUSED, FINISHED}
-    public enum PointChange {IPPON(3), WAZA_ARI(2), YOKO(1), MISTAKE(-1);
+    public enum PointChange {IPPON(3), WAZA_ARI(2), YUKO(1), MISTAKE(-1);
 
 
         private final int score;
@@ -42,13 +42,17 @@ public class ShoubuModel {
         Penalty(int i) {
             this.level = i;
         }
+
+        public int getLevel() {
+            return level;
+        }
     }
 
     private final int MAX_POINT_DIFFERENCE = 6;
-    private static final long TIMER_PERIOD = 100L;
+    private static final long TIMER_PERIOD = 50L;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-
+    private final IShoubuOptions options;
 
 
     private Status status = Status.READY;
@@ -67,6 +71,7 @@ public class ShoubuModel {
     private Karateka winner;
 
     public ShoubuModel(IShoubuOptions options) {
+        this.options = options;
         matchNanoLength = options.getDefaultMatchLengthNano();
     }
 
@@ -79,10 +84,9 @@ public class ShoubuModel {
     }
 
     public void startResumeOrPause() {
-        if (status == Status.READY) {
+        if (status == Status.READY || status == Status.FINISHED) {
             // I start the game
-            elapsedNanoTime = 0;
-            startNanoTime = System.nanoTime();
+            resetStatus();
             task = new UpdateTimerTask();
             timer.scheduleAtFixedRate(task, 0, TIMER_PERIOD);
 
@@ -115,21 +119,26 @@ public class ShoubuModel {
     }
 
     public void reset() {
+        Object old = this.status;
+        this.status = Status.READY;
+        resetStatus();
+        support.firePropertyChange(PROP_STATUS, old, Status.READY);
+    }
+
+    private void resetStatus() {
         if (task != null) {
             task.cancel();
+            task = null;
         }
 
         synchronized (TIME_LOCK) {
             this.elapsedNanoTime = 0;
-            this.startNanoTime = 0;
+            this.startNanoTime = System.nanoTime();
+            matchNanoLength = options.getDefaultMatchLengthNano();
         }
 
         leftKarateka.reset();
         rightKarateka.reset();
-
-        Object old = this.status;
-        this.status = Status.READY;
-        support.firePropertyChange(PROP_STATUS, old, Status.READY);
     }
 
     public Status getStatus() {

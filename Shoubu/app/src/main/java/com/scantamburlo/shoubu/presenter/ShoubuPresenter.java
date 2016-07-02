@@ -53,4 +53,32 @@ public class ShoubuPresenter {
     public void leftIppon() {
         model.addPoint(leftKarateka, ShoubuModel.PointChange.IPPON);
     }
+
+    public void rightIppon() {
+        model.addPoint(rightKarateka, ShoubuModel.PointChange.IPPON);
+    }
+
+    public void leftWazaAri() {
+        model.addPoint(leftKarateka, ShoubuModel.PointChange.WAZA_ARI);
+    }
+
+    public void rightWazaAri() {
+        model.addPoint(rightKarateka, ShoubuModel.PointChange.WAZA_ARI);
+    }
+
+    public void leftYuko() {
+        model.addPoint(leftKarateka, ShoubuModel.PointChange.YUKO);
+    }
+
+    public void rightYuko() {
+        model.addPoint(rightKarateka, ShoubuModel.PointChange.YUKO);
+    }
+
+    public void leftMistake() {
+        model.addPoint(leftKarateka, ShoubuModel.PointChange.MISTAKE);
+    }
+
+    public void rightMistake() {
+        model.addPoint(rightKarateka, ShoubuModel.PointChange.MISTAKE);
+    }
 }
