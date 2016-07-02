@@ -1,7 +1,8 @@
 package com.scantamburlo.shoubu;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import com.scantamburlo.shoubu.presenter.ShoubuPresenter;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Set;
 
 public class ScoreBoardActivity extends AppCompatActivity {
 
@@ -22,7 +24,47 @@ public class ScoreBoardActivity extends AppCompatActivity {
     private ShoubuModel model;
     private ShoubuPresenter presenter;
 
-    private final PropertyChangeListener modelListener = new PropertyChangeListener(){
+    // TODO move in Options
+    private int leftColor;
+    private int rightColor;
+    private int greyColor;
+    // Widgets
+    private TextView time;
+    private Button hajime;
+    private Button reset;
+    // Left
+    private Button leftIppon;
+    private Button leftWazaAri;
+    private Button leftYuko;
+    private Button leftMistake;
+    private TextView leftScore;
+    // cat 1
+    private Button leftC1W;
+    private Button leftC1K;
+    private Button leftC1H;
+    private Button leftC1HC;
+    // cat 2
+    private Button leftC2W;
+    private Button leftC2K;
+    private Button leftC2H;
+    private Button leftC2HC;
+    //Right
+    private Button rightIppon;
+    private Button rightWazaAri;
+    private Button rightYuko;
+    private Button rightMistake;
+    private TextView rightScore;
+    // cat 1
+    private Button rightC1W;
+    private Button rightC1K;
+    private Button rightC1H;
+    private Button rightC1HC;
+    // cat 2
+    private Button rightC2W;
+    private Button rightC2K;
+    private Button rightC2H;
+    private Button rightC2HC;
+    private final PropertyChangeListener modelListener = new PropertyChangeListener() {
         @Override
         public void propertyChange(final PropertyChangeEvent event) {
             final String propName = event.getPropertyName();
@@ -38,35 +80,22 @@ public class ScoreBoardActivity extends AppCompatActivity {
 
                             updateTime(); // When it is reset
 
+                            updateScores();
+
                             updateStatus((ShoubuModel.Status) event.getNewValue());
+
                             break;
                         case ShoubuModel.PROP_POINTS:
                             updateScores();
+                            break;
+                        case ShoubuModel.PROP_PENALITY:
+                            updatePenalties();
                             break;
                     }
                 }
             });
         }
     };
-
-    // Widgets
-    private TextView time;
-    private Button hajime;
-    private Button reset;
-
-    // Left
-    private Button leftIppon;
-    private Button leftWazaAri;
-    private Button leftYuko;
-    private Button leftMistake;
-    private TextView leftScore;
-
-    //Right
-    private Button rightIppon;
-    private Button rightWazaAri;
-    private Button rightYuko;
-    private Button rightMistake;
-    private TextView rightScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,9 +210,48 @@ public class ScoreBoardActivity extends AppCompatActivity {
         this.rightScore = (TextView)findViewById(R.id.rightScore);
         this.leftScore = (TextView)findViewById(R.id.leftScore);
 
+
+        this.leftC1W = initPenalty(R.id.leftC1C, model.getLeftKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.CHUKOKU);
+        this.leftC1K = initPenalty(R.id.leftC1K, model.getLeftKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.KEIKOKU);
+        this.leftC1HC = initPenalty(R.id.leftC1HC, model.getLeftKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.HANSOKU_CHUI);
+        this.leftC1H = initPenalty(R.id.leftC1H, model.getLeftKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.HANSOKU);
+
+        this.leftC2W = initPenalty(R.id.leftC2C, model.getLeftKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.CHUKOKU);
+        this.leftC2K = initPenalty(R.id.leftC2K, model.getLeftKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.KEIKOKU);
+        this.leftC2HC = initPenalty(R.id.leftC2HC, model.getLeftKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.HANSOKU_CHUI);
+        this.leftC2H = initPenalty(R.id.leftC2H, model.getLeftKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.HANSOKU);
+
+        this.rightC1W = initPenalty(R.id.rightC1C, model.getRightKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.CHUKOKU);
+        this.rightC1K = initPenalty(R.id.rightC1K, model.getRightKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.KEIKOKU);
+        this.rightC1HC = initPenalty(R.id.rightC1HC, model.getRightKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.HANSOKU_CHUI);
+        this.rightC1H = initPenalty(R.id.rightC1H, model.getRightKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.HANSOKU);
+
+        this.rightC2W = initPenalty(R.id.rightC2C, model.getRightKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.CHUKOKU);
+        this.rightC2K = initPenalty(R.id.rightC2K, model.getRightKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.KEIKOKU);
+        this.rightC2HC = initPenalty(R.id.rightC2HC, model.getRightKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.HANSOKU_CHUI);
+        this.rightC2H = initPenalty(R.id.rightC2H, model.getRightKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.HANSOKU);
+
+        // Default "@android:color/holo_red_dark"
+        this.leftColor = Color.RED;
+        this.rightColor = Color.BLUE;
+        this.greyColor = Color.GRAY;
+
+
         updateScores();
         updateTime();
         updateStatus(model.getStatus());
+    }
+
+    private Button initPenalty(int id, final ShoubuModel.Karateka karateka, final ShoubuModel.Category cat, final ShoubuModel.Penalty pen) {
+        Button btn = (Button) findViewById(id);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.setPenalty(karateka, cat, pen);
+            }
+        });
+
+        return btn;
     }
 
     private void updateTime(){
@@ -210,5 +278,43 @@ public class ScoreBoardActivity extends AppCompatActivity {
     private void updateScores(){
         leftScore.setText(String.valueOf(model.getLeftKarateka().getPoints()));
         rightScore.setText(String.valueOf(model.getRightKarateka().getPoints()));
+    }
+
+    private void updatePenalties() {
+        // RIGHT
+        Set<ShoubuModel.Penalty> rightCat1 = model.getRightKarateka().getCat1Penalties();
+
+        updatePenaltyButton(rightC1W, rightCat1, ShoubuModel.Penalty.CHUKOKU, rightColor);
+        updatePenaltyButton(rightC1K, rightCat1, ShoubuModel.Penalty.KEIKOKU, rightColor);
+        updatePenaltyButton(rightC1HC, rightCat1, ShoubuModel.Penalty.HANSOKU_CHUI, rightColor);
+        updatePenaltyButton(rightC1H, rightCat1, ShoubuModel.Penalty.HANSOKU, rightColor);
+
+        Set<ShoubuModel.Penalty> rightCat2 = model.getRightKarateka().getCat2Penalties();
+        updatePenaltyButton(rightC2W, rightCat2, ShoubuModel.Penalty.CHUKOKU, rightColor);
+        updatePenaltyButton(rightC2K, rightCat2, ShoubuModel.Penalty.KEIKOKU, rightColor);
+        updatePenaltyButton(rightC2HC, rightCat2, ShoubuModel.Penalty.HANSOKU_CHUI, rightColor);
+        updatePenaltyButton(rightC2H, rightCat2, ShoubuModel.Penalty.HANSOKU, rightColor);
+
+        // LEFT
+        Set<ShoubuModel.Penalty> leftCat1 = model.getLeftKarateka().getCat1Penalties();
+
+        updatePenaltyButton(leftC1W, leftCat1, ShoubuModel.Penalty.CHUKOKU, leftColor);
+        updatePenaltyButton(leftC1K, leftCat1, ShoubuModel.Penalty.KEIKOKU, leftColor);
+        updatePenaltyButton(leftC1HC, leftCat1, ShoubuModel.Penalty.HANSOKU_CHUI, leftColor);
+        updatePenaltyButton(leftC1H, leftCat1, ShoubuModel.Penalty.HANSOKU, leftColor);
+
+        Set<ShoubuModel.Penalty> leftCat2 = model.getLeftKarateka().getCat2Penalties();
+        updatePenaltyButton(leftC2W, leftCat2, ShoubuModel.Penalty.CHUKOKU, leftColor);
+        updatePenaltyButton(leftC2K, leftCat2, ShoubuModel.Penalty.KEIKOKU, leftColor);
+        updatePenaltyButton(leftC2HC, leftCat2, ShoubuModel.Penalty.HANSOKU_CHUI, leftColor);
+        updatePenaltyButton(leftC2H, leftCat2, ShoubuModel.Penalty.HANSOKU, leftColor);
+    }
+
+    private void updatePenaltyButton(Button btn, Set<ShoubuModel.Penalty> cat, ShoubuModel.Penalty pen, int color) {
+        if (cat.contains(pen)) {
+            btn.setBackgroundColor(color);
+            // } else {
+            //     btn.setBackgroundColor(greyColor);
+        }
     }
 }

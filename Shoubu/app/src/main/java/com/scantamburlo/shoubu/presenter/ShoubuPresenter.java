@@ -81,4 +81,8 @@ public class ShoubuPresenter {
     public void rightMistake() {
         model.addPoint(rightKarateka, ShoubuModel.PointChange.MISTAKE);
     }
+
+    public void setPenalty(ShoubuModel.Karateka karateka, ShoubuModel.Category cat, ShoubuModel.Penalty pen) {
+        model.addPenality(karateka, cat, pen);
+    }
 }
