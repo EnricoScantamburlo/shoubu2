@@ -37,9 +37,8 @@
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rightIppon"
         android:layout_centerHorizontal="true"
-        android:editable="false"
+        android:layout_weight="1"
         android:lines="1"
         android:maxLines="1"
         android:singleLine="true"
@@ -49,43 +48,6 @@
         android:textStyle="bold"
         android:typeface="monospace" />
 
-    <Button
-        android:id="@+id/leftIppon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/hajime"
-        android:layout_toEndOf="@+id/leftC1C"
-        android:layout_toRightOf="@+id/leftC1C"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:singleLine="true"
-        android:text="Ippon"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/leftWazaAri"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/leftIppon"
-        android:layout_alignStart="@+id/leftIppon"
-        android:layout_below="@+id/leftIppon"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:singleLine="true"
-        android:text="WazaAri"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/leftYuko"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/leftWazaAri"
-        android:layout_alignLeft="@+id/leftWazaAri"
-        android:layout_alignRight="@+id/leftWazaAri"
-        android:layout_alignStart="@+id/leftWazaAri"
-        android:layout_below="@+id/leftWazaAri"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:singleLine="true"
-        android:text="Yuko"
-        android:textSize="@dimen/shoubu_button_font_size" />
 
     <Button
         android:id="@+id/leftC1C"
@@ -135,70 +97,36 @@
         android:id="@+id/leftScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/leftMistake"
-        android:layout_toEndOf="@+id/leftC1H"
-        android:layout_toRightOf="@+id/leftC1H"
-        android:text="1"
+        android:layout_alignLeft="@+id/leftMistake"
+        android:layout_alignTop="@+id/rightScore"
+        android:digits="2"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="10"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="70dp" />
+        android:textSize="70sp" />
 
     <Button
         android:id="@+id/leftMistake"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/leftScore"
-        android:layout_alignRight="@+id/leftScore"
-        android:layout_below="@+id/rightScore"
+        android:layout_alignLeft="@+id/time"
+        android:layout_alignStart="@+id/time"
+        android:layout_centerVertical="true"
         android:backgroundTint="@android:color/holo_red_dark"
         android:text="-1"
         android:textSize="@dimen/shoubu_button_font_size" />
 
-    <Button
-        android:id="@+id/rightIppon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/reset"
-        android:layout_toLeftOf="@+id/rightC1H"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:singleLine="true"
-        android:text="Ippon"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightWazaAri"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rightIppon"
-        android:layout_alignRight="@+id/rightIppon"
-        android:layout_below="@+id/rightIppon"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:singleLine="true"
-        android:text="WazaAri"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightYuko"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rightWazaAri"
-        android:layout_alignLeft="@+id/rightWazaAri"
-        android:layout_alignRight="@+id/rightWazaAri"
-        android:layout_alignStart="@+id/rightWazaAri"
-        android:layout_below="@+id/rightWazaAri"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:singleLine="true"
-        android:text="Yuko"
-        android:textSize="@dimen/shoubu_button_font_size" />
 
     <Button
         android:id="@+id/rightMistake"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rightScore"
-        android:layout_alignRight="@+id/rightScore"
-        android:layout_below="@+id/rightWazaAri"
+        android:layout_alignEnd="@+id/time"
+        android:layout_alignRight="@+id/time"
+        android:layout_alignTop="@+id/leftMistake"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:text="-1"
         android:textSize="@dimen/shoubu_button_font_size" />
@@ -208,11 +136,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rightMistake"
-        android:layout_toLeftOf="@+id/rightC1C"
-        android:layout_toStartOf="@+id/rightC1C"
-        android:text="1"
+        android:layout_alignEnd="@+id/rightMistake"
+        android:layout_alignRight="@+id/rightMistake"
+        android:digits="2"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="10"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="70dp" />
+        android:textSize="70sp" />
 
     <Button
         android:id="@+id/leftC2C"
@@ -286,8 +217,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/rightC1C"
-        android:layout_toLeftOf="@+id/rightC2HC"
-        android:layout_toStartOf="@+id/rightC2HC"
+        android:layout_toLeftOf="@+id/rightC1HC"
+        android:layout_toStartOf="@+id/rightC1HC"
         android:text="K"
         android:textSize="@dimen/shoubu_button_font_size" />
 
@@ -307,9 +238,9 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rightYuko"
-        android:layout_alignRight="@+id/rightYuko"
-        android:layout_alignTop="@+id/rightC1K"
+        android:layout_above="@+id/rightC2H"
+        android:layout_toLeftOf="@+id/rightC1H"
+        android:layout_toStartOf="@+id/rightC1H"
         android:text="HC"
         android:textSize="@dimen/shoubu_button_font_size" />
 
@@ -318,9 +249,9 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/rightC1HC"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/rightC1HC"
+        android:layout_toEndOf="@+id/rightC1K"
+        android:layout_toRightOf="@+id/rightC1K"
         android:text="HC"
         android:textSize="@dimen/shoubu_button_font_size" />
 
@@ -350,17 +281,127 @@
         android:id="@+id/result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rightScore"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/rightScore"
-        android:layout_alignTop="@+id/leftC1H"
-        android:layout_toRightOf="@+id/leftC1H"
+        android:layout_above="@+id/rightC1C"
+        android:layout_alignEnd="@+id/rightC1H"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/rightC1H"
+        android:layout_below="@+id/leftMistake"
         android:enabled="true"
-        android:lines="2"
-        android:text="Blue\nWins"
+        android:lines="1"
+        android:maxLines="1"
+        android:text="Blue Wins"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="47dp"
         android:textStyle="bold" />
+
+    <TableLayout
+        android:id="@+id/leftTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/leftMistake"
+        android:layout_below="@+id/time"
+        android:layout_toLeftOf="@+id/time"
+        android:layout_toStartOf="@+id/time">
+        />
+
+        <TableRow android:layout_width="fill_parent">
+
+            <Button
+                android:id="@+id/leftIppon"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:singleLine="true"
+                android:text="Ippon"
+                android:textSize="@dimen/shoubu_button_font_size" />
+        </TableRow>
+
+        <TableRow android:layout_width="fill_parent">
+
+            <Button
+                android:id="@+id/leftWazaAri"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:singleLine="true"
+                android:text="WazaAri"
+                android:textSize="@dimen/shoubu_button_font_size" />
+        </TableRow>
+
+        <TableRow android:layout_width="fill_parent">
+
+            <Button
+                android:id="@+id/leftYuko"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/leftWazaAri"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:singleLine="true"
+                android:text="Yuko"
+                android:textSize="@dimen/shoubu_button_font_size" />
+        </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/rightTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/rightMistake"
+        android:layout_alignEnd="@+id/reset"
+        android:layout_alignRight="@+id/reset"
+        android:layout_below="@+id/reset"
+        android:layout_toRightOf="@+id/time">
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/rightIppon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reset"
+                android:layout_toLeftOf="@+id/rightC1H"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:singleLine="true"
+                android:text="Ippon"
+                android:textSize="@dimen/shoubu_button_font_size" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/rightWazaAri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:singleLine="true"
+                android:text="WazaAri"
+                android:textSize="@dimen/shoubu_button_font_size" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/rightYuko"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@+id/rightWazaAri"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:singleLine="true"
+                android:text="Yuko"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+        </TableRow>
+
+    </TableLayout>
 
 </RelativeLayout>

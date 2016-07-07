@@ -251,6 +251,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
         updateScores();
         updateTime();
         updateStatus(model.getStatus());
+
     }
 
     private void updateColors() {
@@ -268,7 +269,32 @@ public class ScoreBoardActivity extends AppCompatActivity {
         setColor(rightMistake, color);
 
         updatePenalties();
+        updateWidths();
     }
+
+    private void updateWidths() {
+        int maxWidth = leftIppon.getWidth();
+        if (leftWazaAri.getWidth() > maxWidth) {
+            maxWidth = leftWazaAri.getWidth();
+        }
+
+        if (leftYuko.getWidth() > maxWidth) {
+            maxWidth = leftYuko.getWidth();
+        }
+
+        final int max = maxWidth;
+
+        leftIppon.post(new Runnable() {
+
+            public void run() {
+                leftIppon.setWidth(max);
+                leftWazaAri.setWidth(max);
+                leftYuko.setWidth(max);
+            }
+
+        });
+    }
+
 
     private void setColor(Button btn, int color) {
         Drawable tmpDrawable = DrawableCompat.wrap(btn.getBackground());
