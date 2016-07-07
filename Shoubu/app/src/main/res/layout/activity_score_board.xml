@@ -346,4 +346,21 @@
         android:text="H"
         android:textSize="@dimen/shoubu_button_font_size" />
 
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/rightScore"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/rightScore"
+        android:layout_alignTop="@+id/leftC1H"
+        android:layout_toRightOf="@+id/leftC1H"
+        android:enabled="true"
+        android:lines="2"
+        android:text="Blue\nWins"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="47dp"
+        android:textStyle="bold" />
+
 </RelativeLayout>

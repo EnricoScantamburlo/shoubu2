@@ -15,72 +15,32 @@ public class ShoubuModel {
     public final static String PROP_STATUS = "status"; // NOI18N
     public final static String PROP_ELAPSED_TIME = "elapsedTime"; // NOI18N
     public final static String PROP_POINTS = "points"; // NOI18N
-    public final static String PROP_PENALITY = "penality"; // NOI18N
-
-
-    public enum Status {READY, RUNNING, PAUSED, FINISHED}
-    public enum PointChange {IPPON(3), WAZA_ARI(2), YUKO(1), MISTAKE(-1);
-
-
-        private final int score;
-
-        PointChange(int i) {
-            this.score = i;
-        }
-
-        public int getScore() {
-            return score;
-        }
-    }
-
-    public enum Category {ONE, TWO}
-    public enum Penalty { CHUKOKU(1),KEIKOKU(2),HANSOKU_CHUI(3), HANSOKU(4);
-
-
-        private final int level;
-
-        Penalty(int i) {
-            this.level = i;
-        }
-
-        public int getLevel() {
-            return level;
-        }
-    }
-
-    private final int MAX_POINT_DIFFERENCE = 6;
+    public final static String PROP_PENALITY = "penalty"; // NOI18N
     private static final long TIMER_PERIOD = 50L;
-
+    private final int MAX_POINT_DIFFERENCE = 6;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private final IShoubuOptions options;
-
-
-    private Status status = Status.READY;
-
     private final Timer timer = new Timer();
-    private UpdateTimerTask task;
-
     private final Object TIME_LOCK = new Object();
+    private final Karateka leftKarateka;
+    private final Karateka rightKarateka;
+    private Status status = Status.READY;
+    private UpdateTimerTask task;
     private volatile long elapsedNanoTime = 0;
     private volatile long startNanoTime;
-
     private long matchNanoLength;
-
-    private Karateka leftKarateka = new Karateka();
-    private Karateka rightKarateka = new Karateka();
     private Karateka winner;
 
     public ShoubuModel(IShoubuOptions options) {
         this.options = options;
         matchNanoLength = options.getDefaultMatchLengthNano();
+
+        leftKarateka = new Karateka(options.getLeftName());
+        rightKarateka = new Karateka(options.getRightName());
     }
 
     public ShoubuModel() {
         this(new ShoubuOptions());
-    }
-
-    public void setMatchNanoLength(long matchNanoLength) {
-        this.matchNanoLength = matchNanoLength;
     }
 
     public void startResumeOrPause() {
@@ -103,14 +63,7 @@ public class ShoubuModel {
             support.firePropertyChange(PROP_STATUS, Status.PAUSED, Status.RUNNING);
         } else if (status == Status.RUNNING) {
             // I pause the game
-            boolean cancelled = task.cancel();
-            long now = System.nanoTime();
-
-            if (!cancelled) {
-                synchronized (TIME_LOCK) {
-                    elapsedNanoTime += (now - startNanoTime);
-                }
-            }
+            storeTime();
 
             this.status = Status.PAUSED;
             support.firePropertyChange(PROP_STATUS, Status.RUNNING, Status.PAUSED);
@@ -137,6 +90,7 @@ public class ShoubuModel {
             matchNanoLength = options.getDefaultMatchLengthNano();
         }
 
+        winner = null;
         leftKarateka.reset();
         rightKarateka.reset();
     }
@@ -153,18 +107,18 @@ public class ShoubuModel {
         return matchNanoLength;
     }
 
-    public void finish(){
-        if(task != null){
-            task.cancel();
-        }
+    public void setMatchNanoLength(long matchNanoLength) {
+        this.matchNanoLength = matchNanoLength;
+    }
 
+    public void finish() {
+        storeTime();
         // finds the winner
-        hasWinner();
+        declareWinner();
 
         this.status = Status.FINISHED;
         support.firePropertyChange(PROP_STATUS, Status.RUNNING, Status.FINISHED);
     }
-
 
     public Karateka getLeftKarateka() {
         return leftKarateka;
@@ -178,35 +132,49 @@ public class ShoubuModel {
         return winner;
     }
 
-    public void addPoint(Karateka player, PointChange point){
+    public void addPoint(Karateka player, PointChange point) {
         // TODO Stop the timer
         player.addPoint(point);
 
         // I reset the winner because it could
         // have been resetting the winning point
-        //  TODO I also have to reset the status of the Model
-        winner = null;
 
-        if(hasWinner()){
+        boolean fireStatusReset = false;
+        if (point == PointChange.MISTAKE && status == Status.FINISHED && winner != null) {
+            //  TODO I also have to reset the status of the Model
+            if (!hasWinner(true)) {
+                winner = null;
+                status = Status.PAUSED;
+                fireStatusReset = true;
+            }
+        }
+
+        // If the status was reset no need to check
+        // for a winner
+        if (!fireStatusReset && hasWinner()) {
             finish();
         }
 
         support.firePropertyChange(PROP_POINTS, 0, point.getScore());
+        if (fireStatusReset) {
+            support.firePropertyChange(PROP_STATUS, Status.FINISHED, Status.PAUSED);
+        }
     }
 
-    public void addPenality(Karateka player, Category cat, Penalty pen){
+    public void addPenality(Karateka player, Category cat, Penalty pen) {
         // TODO Stop the timer
 
-        player.addPenality(cat, pen);
-        if(pen == Penalty.HANSOKU){
+        player.addPenalty(cat, pen);
+        if (hasWinner()) {
+            declareWinner();
             finish();
         }
 
         support.firePropertyChange(PROP_PENALITY, null, null);
     }
 
-    public void removePenality(Karateka player, Category cat, Penalty pen){
-        player.removePenality(cat, pen);
+    public void removePenality(Karateka player, Category cat, Penalty pen) {
+        player.removePenalty(cat, pen);
         support.firePropertyChange(PROP_PENALITY, null, null);
     }
 
@@ -214,12 +182,112 @@ public class ShoubuModel {
         support.addPropertyChangeListener(pcl);
     }
 
+    private void storeTime() {
+        if (task != null) {
+            boolean cancelled = task.cancel();
+            long now = System.nanoTime();
+
+            if (!cancelled) {
+                synchronized (TIME_LOCK) {
+                    elapsedNanoTime += (now - startNanoTime);
+                }
+            }
+            task = null;
+        }
+    }
+
+    /**
+     * @return sets the winner
+     */
+    private void declareWinner() {
+
+        if (Math.abs(leftKarateka.getPoints() - rightKarateka.getPoints()) >= MAX_POINT_DIFFERENCE) {
+            winner = leftKarateka.getPoints() > rightKarateka.getPoints() ? leftKarateka : rightKarateka;
+        } else if (leftKarateka.getCat1Penalties().contains(Penalty.HANSOKU) || leftKarateka.getCat2Penalties().contains(Penalty.HANSOKU)) {
+            winner = rightKarateka;
+        } else if (rightKarateka.getCat1Penalties().contains(Penalty.HANSOKU) || rightKarateka.getCat2Penalties().contains(Penalty.HANSOKU)) {
+            winner = leftKarateka;
+        } else if (status == Status.FINISHED) {
+            if (leftKarateka.getPoints() != rightKarateka.getPoints()) {
+                winner = leftKarateka.getPoints() > rightKarateka.getPoints() ? leftKarateka : rightKarateka;
+            }
+        }
+    }
+
+    private boolean hasWinner() {
+        return hasWinner(false);
+    }
+
+    private boolean hasWinner(boolean ignoreStatus) {
+        if (Math.abs(leftKarateka.getPoints() - rightKarateka.getPoints()) >= MAX_POINT_DIFFERENCE) {
+            return true;
+        }
+
+        if (leftKarateka.getCat1Penalties().contains(Penalty.HANSOKU) || leftKarateka.getCat2Penalties().contains(Penalty.HANSOKU)) {
+            return true;
+        }
+
+        if (rightKarateka.getCat1Penalties().contains(Penalty.HANSOKU) || rightKarateka.getCat2Penalties().contains(Penalty.HANSOKU)) {
+            return true;
+        }
+
+        if (!ignoreStatus && status == Status.FINISHED) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public enum Status {READY, RUNNING, PAUSED, FINISHED}
+
+
+    // Private stuff
+
+
+    public enum PointChange {
+        IPPON(3), WAZA_ARI(2), YUKO(1), MISTAKE(-1);
+
+
+        private final int score;
+
+        PointChange(int i) {
+            this.score = i;
+        }
+
+        public int getScore() {
+            return score;
+        }
+    }
+
+    public enum Category {ONE, TWO}
+
+    public enum Penalty {
+        CHUKOKU(1), KEIKOKU(2), HANSOKU_CHUI(3), HANSOKU(4);
+
+
+        private final int level;
+
+        Penalty(int i) {
+            this.level = i;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+    }
+
     public class Karateka {
 
-        private final EnumSet<Penalty> cat1Penalties =  EnumSet.noneOf(Penalty.class);
+        private final EnumSet<Penalty> cat1Penalties = EnumSet.noneOf(Penalty.class);
         private final EnumSet<Penalty> cat2Penalties = EnumSet.noneOf(Penalty.class);
+        private final String name;
+
 
         private int points = 0;
+
+        public Karateka(String name) {
+            this.name = name;
+        }
 
 
         public int getPoints() {
@@ -235,70 +303,38 @@ public class ShoubuModel {
             return EnumSet.copyOf(cat2Penalties);
         }
 
-        private void addPoint(PointChange point){
+        private void addPoint(PointChange point) {
             points += point.getScore();
-            if(points < 0){
+            if (points < 0) {
                 points = 0;
             }
         }
 
-        private void addPenality(Category cat, Penalty pen){
-            if(cat == Category.ONE){
+        private void addPenalty(Category cat, Penalty pen) {
+            if (cat == Category.ONE) {
                 cat1Penalties.add(pen);
-            } else if(cat == Category.TWO){
+            } else if (cat == Category.TWO) {
                 cat2Penalties.add(pen);
             }
         }
 
-        private void removePenality(Category cat, Penalty pen){
-            if(cat == Category.ONE){
+        private void removePenalty(Category cat, Penalty pen) {
+            if (cat == Category.ONE) {
                 cat1Penalties.remove(pen);
-            } else if(cat == Category.TWO){
+            } else if (cat == Category.TWO) {
                 cat2Penalties.remove(pen);
             }
         }
 
-        private void reset(){
+        private void reset() {
             points = 0;
             cat1Penalties.clear();
             cat2Penalties.clear();
         }
-    }
 
-
-    // Private stuff
-
-    /**
-     *
-     * @return true is a winner is found
-     */
-    private boolean hasWinner(){
-        if(winner != null){
-            return true;
+        public String getName() {
+            return this.name;
         }
-
-        if( Math.abs(leftKarateka.getPoints() - rightKarateka.getPoints()) >= MAX_POINT_DIFFERENCE){
-            winner = leftKarateka.getPoints() > rightKarateka.getPoints() ? leftKarateka : rightKarateka;
-            return true;
-        }
-
-        if(status == Status.FINISHED){
-            winner = leftKarateka.getPoints() > rightKarateka.getPoints() ? leftKarateka : rightKarateka;
-            return true;
-        }
-
-        if(leftKarateka.getCat1Penalties().contains(Penalty.HANSOKU) || leftKarateka.getCat2Penalties().contains(Penalty.HANSOKU)){
-            winner = rightKarateka;
-            return true;
-        }
-
-        if(rightKarateka.getCat1Penalties().contains(Penalty.HANSOKU) ||rightKarateka.getCat2Penalties().contains(Penalty.HANSOKU)){
-            winner =  leftKarateka;
-            return true;
-        }
-
-        // TODO check penalties
-        return false;
     }
 
     private class UpdateTimerTask extends TimerTask {

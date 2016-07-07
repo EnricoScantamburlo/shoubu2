@@ -9,9 +9,17 @@ public class ShoubuOptions implements IShoubuOptions{
 
     }
 
-
-
     public long getDefaultMatchLengthNano(){
         return ShoubuModel.MILLIS_TO_NANOS * 5 * 60 * 1000;
+    }
+
+    @Override
+    public String getLeftName() {
+        return "Aka";
+    }
+
+    @Override
+    public String getRightName() {
+        return "Ao";
     }
 }

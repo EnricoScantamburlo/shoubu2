@@ -6,4 +6,8 @@ package com.scantamburlo.shoubu.model;
 public interface IShoubuOptions {
 
     long getDefaultMatchLengthNano();
+
+    String getLeftName();
+
+    String getRightName();
 }

@@ -1,9 +1,11 @@
 package com.scantamburlo.shoubu.model;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by scanti.rulla at gmail.com on 30/06/16.
@@ -114,6 +116,21 @@ public class ShoubuModelTest {
         assertSame(leftKarateka, model.getWinner());
 
         assertSame(ShoubuModel.Status.FINISHED, model.getStatus());
+    }
+
+    @org.junit.Test
+    public void shouldDeclareWinner() {
+        ShoubuModel model = new ShoubuModel();
+        ShoubuModel.Karateka leftKarateka = model.getLeftKarateka();
+        ShoubuModel.Karateka rightKarateka = model.getRightKarateka();
+
+        model.addPoint(leftKarateka, ShoubuModel.PointChange.IPPON);
+        model.addPoint(leftKarateka, ShoubuModel.PointChange.IPPON);
+        model.addPoint(leftKarateka, ShoubuModel.PointChange.IPPON);
+
+        assertSame(leftKarateka, model.getWinner());
+        assertSame(ShoubuModel.Status.FINISHED, model.getStatus());
+
 
     }
 }

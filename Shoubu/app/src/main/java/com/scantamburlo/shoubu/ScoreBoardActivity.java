@@ -64,6 +64,10 @@ public class ScoreBoardActivity extends AppCompatActivity {
     private Button rightC2K;
     private Button rightC2H;
     private Button rightC2HC;
+
+
+    private TextView result;
+
     private final PropertyChangeListener modelListener = new PropertyChangeListener() {
         @Override
         public void propertyChange(final PropertyChangeEvent event) {
@@ -83,7 +87,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
                             updateScores();
 
                             updateStatus((ShoubuModel.Status) event.getNewValue());
-
+                            updatePenalties();
                             break;
                         case ShoubuModel.PROP_POINTS:
                             updateScores();
@@ -96,6 +100,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
             });
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +143,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
             }
         });
 
-        this.leftIppon = (Button)findViewById(R.id.leftIppon);
+        this.leftIppon = (Button) findViewById(R.id.leftIppon);
         this.leftIppon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +152,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
         });
 
 
-        this.rightIppon = (Button)findViewById(R.id.rightIppon);
+        this.rightIppon = (Button) findViewById(R.id.rightIppon);
         this.rightIppon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +160,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
             }
         });
 
-        this.leftWazaAri = (Button)findViewById(R.id.leftWazaAri);
+        this.leftWazaAri = (Button) findViewById(R.id.leftWazaAri);
         this.leftWazaAri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +169,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
         });
 
 
-        this.rightWazaAri = (Button)findViewById(R.id.rightWazaAri);
+        this.rightWazaAri = (Button) findViewById(R.id.rightWazaAri);
         this.rightWazaAri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,7 +177,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
             }
         });
 
-        this.leftYuko = (Button)findViewById(R.id.leftYuko);
+        this.leftYuko = (Button) findViewById(R.id.leftYuko);
         this.leftYuko.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,7 +186,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
         });
 
 
-        this.rightYuko = (Button)findViewById(R.id.rightYuko);
+        this.rightYuko = (Button) findViewById(R.id.rightYuko);
         this.rightYuko.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,7 +194,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
             }
         });
 
-        this.leftMistake = (Button)findViewById(R.id.leftMistake);
+        this.leftMistake = (Button) findViewById(R.id.leftMistake);
         this.leftMistake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,7 +203,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
         });
 
 
-        this.rightMistake = (Button)findViewById(R.id.rightMistake);
+        this.rightMistake = (Button) findViewById(R.id.rightMistake);
         this.rightMistake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,8 +212,8 @@ public class ScoreBoardActivity extends AppCompatActivity {
         });
 
 
-        this.rightScore = (TextView)findViewById(R.id.rightScore);
-        this.leftScore = (TextView)findViewById(R.id.leftScore);
+        this.rightScore = (TextView) findViewById(R.id.rightScore);
+        this.leftScore = (TextView) findViewById(R.id.leftScore);
 
 
         this.leftC1W = initPenalty(R.id.leftC1C, model.getLeftKarateka(), ShoubuModel.Category.ONE, ShoubuModel.Penalty.CHUKOKU);
@@ -230,6 +235,9 @@ public class ScoreBoardActivity extends AppCompatActivity {
         this.rightC2K = initPenalty(R.id.rightC2K, model.getRightKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.KEIKOKU);
         this.rightC2HC = initPenalty(R.id.rightC2HC, model.getRightKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.HANSOKU_CHUI);
         this.rightC2H = initPenalty(R.id.rightC2H, model.getRightKarateka(), ShoubuModel.Category.TWO, ShoubuModel.Penalty.HANSOKU);
+
+
+        this.result = (TextView) findViewById(R.id.result);
 
         // Default "@android:color/holo_red_dark"
         this.leftColor = Color.RED;
@@ -254,12 +262,12 @@ public class ScoreBoardActivity extends AppCompatActivity {
         return btn;
     }
 
-    private void updateTime(){
+    private void updateTime() {
         this.time.setText(presenter.getRemainingTime());
     }
 
-    private void updateStatus(ShoubuModel.Status newStatus){
-        switch (newStatus){
+    private void updateStatus(ShoubuModel.Status newStatus) {
+        switch (newStatus) {
             case READY:
                 this.hajime.setText("Hajime"); // TODO I18N
                 break;
@@ -273,9 +281,11 @@ public class ScoreBoardActivity extends AppCompatActivity {
                 this.hajime.setText("Resume");// TODO I18N
                 break;
         }
+
+        updateResult(newStatus);
     }
 
-    private void updateScores(){
+    private void updateScores() {
         leftScore.setText(String.valueOf(model.getLeftKarateka().getPoints()));
         rightScore.setText(String.valueOf(model.getRightKarateka().getPoints()));
     }
@@ -313,8 +323,27 @@ public class ScoreBoardActivity extends AppCompatActivity {
     private void updatePenaltyButton(Button btn, Set<ShoubuModel.Penalty> cat, ShoubuModel.Penalty pen, int color) {
         if (cat.contains(pen)) {
             btn.setBackgroundColor(color);
-            // } else {
-            //     btn.setBackgroundColor(greyColor);
+        } else {
+            btn.setBackgroundColor(greyColor);
         }
+    }
+
+    private void updateResult(ShoubuModel.Status status) {
+        if (status == ShoubuModel.Status.FINISHED) {
+            result.setVisibility(View.VISIBLE);
+
+            ShoubuModel.Karateka winner = model.getWinner();
+            String msg;
+            if (winner != null) {
+                msg = winner.getName() + " no kachi"; // TODO I18N
+            } else {
+                msg = "Hikiwake"; // TODO I18N
+            }
+            result.setText(msg);
+
+        } else {
+            result.setVisibility(View.INVISIBLE);
+        }
+
     }
 }
