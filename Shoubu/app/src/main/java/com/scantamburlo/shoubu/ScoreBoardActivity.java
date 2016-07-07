@@ -1,7 +1,9 @@
 package com.scantamburlo.shoubu;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -240,14 +242,38 @@ public class ScoreBoardActivity extends AppCompatActivity {
         this.result = (TextView) findViewById(R.id.result);
 
         // Default "@android:color/holo_red_dark"
-        this.leftColor = Color.RED;
-        this.rightColor = Color.BLUE;
-        this.greyColor = Color.GRAY;
+        this.leftColor = model.getLeftColor();
+        this.rightColor = model.getRightColor();
+        this.greyColor = Color.GRAY; // TODO USE R.colors ....
 
 
+        updateColors(); // also calls updatePenalties
         updateScores();
         updateTime();
         updateStatus(model.getStatus());
+    }
+
+    private void updateColors() {
+        int color = leftColor;
+        setColor(this.leftIppon, color);
+
+        setColor(leftWazaAri, color);
+        setColor(leftYuko, color);
+        setColor(leftMistake, color);
+
+        color = rightColor;
+        setColor(rightIppon, color);
+        setColor(rightWazaAri, color);
+        setColor(rightYuko, color);
+        setColor(rightMistake, color);
+
+        updatePenalties();
+    }
+
+    private void setColor(Button btn, int color) {
+        Drawable tmpDrawable = DrawableCompat.wrap(btn.getBackground());
+        DrawableCompat.setTint(tmpDrawable, color);
+        btn.setBackground(tmpDrawable);
     }
 
     private Button initPenalty(int id, final ShoubuModel.Karateka karateka, final ShoubuModel.Category cat, final ShoubuModel.Penalty pen) {
@@ -322,9 +348,10 @@ public class ScoreBoardActivity extends AppCompatActivity {
 
     private void updatePenaltyButton(Button btn, Set<ShoubuModel.Penalty> cat, ShoubuModel.Penalty pen, int color) {
         if (cat.contains(pen)) {
+            setColor(btn, color);
             btn.setBackgroundColor(color);
         } else {
-            btn.setBackgroundColor(greyColor);
+            setColor(btn, greyColor);
         }
     }
 

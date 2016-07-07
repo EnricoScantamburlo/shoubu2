@@ -238,6 +238,14 @@ public class ShoubuModel {
         return false;
     }
 
+    public int getLeftColor() {
+        return options.getLeftColor();
+    }
+
+    public int getRightColor() {
+        return options.getRightColor();
+    }
+
     public enum Status {READY, RUNNING, PAUSED, FINISHED}
 
 

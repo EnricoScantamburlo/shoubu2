@@ -7,7 +7,14 @@ public interface IShoubuOptions {
 
     long getDefaultMatchLengthNano();
 
+    void setDefaultMatchLengthNano(long time);
+
     String getLeftName();
 
     String getRightName();
+
+    int getLeftColor();
+
+    int getRightColor();
+
 }
