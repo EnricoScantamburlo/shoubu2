@@ -49,50 +49,6 @@
         android:typeface="monospace" />
 
 
-    <Button
-        android:id="@+id/leftC1C"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/leftC2C"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="C"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/leftC1K"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/leftC1C"
-        android:layout_toEndOf="@+id/leftC1C"
-        android:layout_toRightOf="@+id/leftC1C"
-        android:text="K"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/leftC1HC"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/leftC1K"
-        android:layout_toEndOf="@+id/leftC1K"
-        android:layout_toRightOf="@+id/leftC1K"
-        android:text="HC"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/leftC1H"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/leftC1HC"
-        android:layout_toEndOf="@+id/leftC1HC"
-        android:layout_toRightOf="@+id/leftC1HC"
-        android:text="H"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
     <TextView
         android:id="@+id/leftScore"
         android:layout_width="wrap_content"
@@ -145,147 +101,16 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="70sp" />
 
-    <Button
-        android:id="@+id/leftC2C"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="C"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/leftC2K"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/leftC2C"
-        android:layout_toEndOf="@+id/leftC1C"
-        android:layout_toRightOf="@+id/leftC1C"
-        android:text="K"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/leftC2HC"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/leftC1K"
-        android:layout_toRightOf="@+id/leftC1K"
-        android:text="HC"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/leftC2H"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/leftC2HC"
-        android:layout_toEndOf="@+id/leftC2HC"
-        android:layout_toRightOf="@+id/leftC2HC"
-        android:text="H"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightC1C"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/rightC2C"
-        android:layout_toLeftOf="@+id/rightC1K"
-        android:layout_toStartOf="@+id/rightC1K"
-        android:text="C"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightC2C"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/rightC1C"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/rightC1C"
-        android:text="C"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightC1K"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/rightC1C"
-        android:layout_toLeftOf="@+id/rightC1HC"
-        android:layout_toStartOf="@+id/rightC1HC"
-        android:text="K"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightC2K"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/rightC1HC"
-        android:layout_toStartOf="@+id/rightC1HC"
-        android:text="K"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightC1HC"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/rightC2H"
-        android:layout_toLeftOf="@+id/rightC1H"
-        android:layout_toStartOf="@+id/rightC1H"
-        android:text="HC"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightC2HC"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/rightC1K"
-        android:layout_toRightOf="@+id/rightC1K"
-        android:text="HC"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightC1H"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/rightC1HC"
-        android:text="H"
-        android:textSize="@dimen/shoubu_button_font_size" />
-
-    <Button
-        android:id="@+id/rightC2H"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/reset"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/reset"
-        android:text="H"
-        android:textSize="@dimen/shoubu_button_font_size" />
 
     <TextView
         android:id="@+id/result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rightC1C"
-        android:layout_alignEnd="@+id/rightC1H"
+        android:layout_alignEnd="@+id/rightPenaltyTable"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/rightC1H"
+        android:layout_alignRight="@+id/rightPenaltyTable"
         android:layout_below="@+id/leftMistake"
         android:enabled="true"
         android:lines="1"
@@ -401,6 +226,207 @@
                 android:textSize="@dimen/shoubu_button_font_size" />
 
         </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/leftPenaltyTable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignEnd="@+id/leftTableLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/leftTableLayout"
+        android:layout_below="@+id/result">
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/leftC1C"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="C"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+            <Button
+                android:id="@+id/leftC1K"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="K"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+            <Button
+                android:id="@+id/leftC1HC"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="HC"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+            <Button
+                android:id="@+id/leftC1H"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="H"
+                android:textSize="@dimen/shoubu_button_font_size" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/leftC2C"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="C"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+            <Button
+                android:id="@+id/leftC2K"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="K"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+            <Button
+                android:id="@+id/leftC2HC"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="HC"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+            <Button
+                android:id="@+id/leftC2H"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="H"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/rightPenaltyTable"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/rightTableLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/rightTableLayout"
+        android:layout_below="@+id/result"
+        android:layout_toEndOf="@+id/leftMistake"
+        android:layout_toLeftOf="@+id/rightScore">
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/rightC1C"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="C"
+                android:textSize="@dimen/shoubu_button_font_size"
+
+                />
+
+            <Button
+                android:id="@+id/rightC1K"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="K"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+            <Button
+                android:id="@+id/rightC1HC"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="HC"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+            <Button
+                android:id="@+id/rightC1H"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="H"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/rightC2C"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/rightC1C"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/rightC1C"
+                android:layout_weight="1"
+                android:text="C"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+
+            <Button
+                android:id="@+id/rightC2K"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/rightC1HC"
+                android:layout_toStartOf="@+id/rightC1HC"
+                android:layout_weight="1"
+                android:text="K"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+
+            <Button
+                android:id="@+id/rightC2HC"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/rightC1K"
+                android:layout_toRightOf="@+id/rightC1K"
+                android:layout_weight="1"
+                android:text="HC"
+                android:textSize="@dimen/shoubu_button_font_size" />
+
+
+            <Button
+                android:id="@+id/rightC2H"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/reset"
+                android:layout_alignParentBottom="true"
+                android:layout_alignRight="@+id/reset"
+                android:layout_weight="1"
+                android:text="H"
+                android:textSize="@dimen/shoubu_button_font_size" />
+        </TableRow>
+
 
     </TableLayout>
 
