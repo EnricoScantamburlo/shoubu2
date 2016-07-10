@@ -323,12 +323,12 @@
         android:id="@+id/rightPenaltyTable"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
+        android:layout_alignEnd="@+id/rightTableLayout"
         android:layout_alignLeft="@+id/rightTableLayout"
         android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/rightTableLayout"
         android:layout_alignStart="@+id/rightTableLayout"
-        android:layout_below="@+id/result"
-        android:layout_toEndOf="@+id/leftMistake"
-        android:layout_toLeftOf="@+id/rightScore">
+        android:layout_below="@+id/result">
 
         <TableRow>
 
